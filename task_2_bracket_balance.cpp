@@ -4,10 +4,8 @@
 using namespace std;
 
 void calculateBalances(string input);
-int countRounds(char symbol);
-int countSquares(char symbol);
-int countCurlies(char symbol);
-void printBracketBalances(int roundBalance, int squareBalance, int curlyBalance);
+int countBalance(char symbol, char opening, char closing);
+void printBracketBalances(int roundBalance, int squareBalance, int curlyBalance, int angleBalance);
 void printBalance(int balance);
 
 int main()
@@ -25,32 +23,24 @@ void calculateBalances(string input)
     int roundBalance = 0;
     int squareBalance = 0;
     int curlyBalance = 0;
+    int angleBalance = 0;
     for (char character : input) {
-        roundBalance += countRounds(character);
-        squareBalance += countSquares(character);
-        curlyBalance += countCurlies(character);
+        roundBalance += countBalance(character, '(', ')');
+        squareBalance += countBalance(character, '[', ']');
+        curlyBalance += countBalance(character, '{', '}');
+        angleBalance += countBalance(character, '<', '>');
     }
 
     cout << "Input: " << input;
-    printBracketBalances(roundBalance, squareBalance, curlyBalance);
+    printBracketBalances(roundBalance, squareBalance, curlyBalance, angleBalance);
 }
 
-int countRounds(char symbol)
+int countBalance(char symbol, char opening, char closing)
 {
-    return (symbol == '(') ? 1 : (symbol == ')') ? -1 : 0;
+    return (symbol == opening) ? 1 : (symbol == closing) ? -1 : 0;
 }
 
-int countSquares(char symbol)
-{
-    return (symbol == '[') ? 1 : (symbol == ']') ? -1 : 0;
-}
-
-int countCurlies(char symbol)
-{
-    return (symbol == '{') ? 1 : (symbol == '}') ? -1 : 0;
-}
-
-void printBracketBalances(int roundBalance, int squareBalance, int curlyBalance)
+void printBracketBalances(int roundBalance, int squareBalance, int curlyBalance, int angleBalance)
 {
     cout << endl << "Round brackets: ";
     printBalance(roundBalance);
@@ -58,6 +48,8 @@ void printBracketBalances(int roundBalance, int squareBalance, int curlyBalance)
     printBalance(squareBalance);
     cout << endl << "Curly brackets: ";
     printBalance(curlyBalance);
+    cout << endl << "Angle brackets: ";
+    printBalance(angleBalance);
 }
 
 void printBalance(int balance)
